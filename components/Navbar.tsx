@@ -6,12 +6,13 @@ import { useState } from 'react';
 import { FiMenu, FiX } from "react-icons/fi";
 import Image from "next/image";
 
+
 export default function Navbar() {
     const [open, setOpen] = useState(false);
 
     const navLinks = [
         { name: 'Home', href: '/' },
-        { name: 'About', href: '/about' },
+        { name: 'About', href: '#about' },
         { name: 'Projects', href: '/projects' },
         { name: "Lifestyle", href: '/lifestyle' },
         { name: 'Contact', href: '/contact' },
