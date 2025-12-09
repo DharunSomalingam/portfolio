@@ -7,7 +7,7 @@ export default function About() {
     return (
         <motion.section
             id="about"
-            className="mt-44 w-full flex flex-col items-end"
+            className="mt-44 w-full flex flex-col items-end scroll-mt-40"
             initial={{ x: -200, opacity: 0 }}
             whileInView={{ x: 0, opacity: 1 }} // fix opacity here
             transition={{ duration: 0.8, delay: 0.2, ease: 'easeOut' }}
@@ -40,7 +40,7 @@ export default function About() {
                         src="/uwa.jpg"
                         alt="Description"
                         width={900}
-                        height={650}
+                        height={900}
                         className="object-contain"
                         />
                 </div>
