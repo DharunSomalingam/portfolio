@@ -409,7 +409,7 @@ export default function Contact() {
 }
 
 function ContactNode({ node, index, setActiveNode, isHovered, setHoveredIndex, mousePosition }: any) {
-    const cardRef = useRef<HTMLDivElement>(null);
+    const cardRef = useRef<HTMLAnchorElement>(null);
     const [cardPosition, setCardPosition] = useState({ x: 0, y: 0 });
 
     useEffect(() => {

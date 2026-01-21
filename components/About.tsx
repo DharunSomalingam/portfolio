@@ -2,7 +2,7 @@
 
 import { motion, AnimatePresence } from 'framer-motion'
 import Image from 'next/image'
-import { useEffect, useState, useRef } from 'react'
+import { useMemo,useEffect, useState, useRef } from 'react'
 
 // --- FULL-PAGE UFO NEURAL ENGINE ---
 function UFONeuralBackground() {
@@ -26,8 +26,9 @@ function UFONeuralBackground() {
         class Particle {
             x: number; y: number; vx: number; vy: number;
             constructor() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
+                // Fallback to window size if canvas isn't ready yet
+                this.x = Math.random() * (canvas?.width || (typeof window !== 'undefined' ? window.innerWidth : 800));
+                this.y = Math.random() * (canvas?.height || (typeof window !== 'undefined' ? window.innerHeight : 600));
                 this.vx = (Math.random() - 0.5) * 0.4;
                 this.vy = (Math.random() - 0.5) * 0.4;
             }
@@ -339,7 +340,6 @@ export default function About() {
                                 <div className="relative z-10 p-12">
                                     <div className="flex justify-between items-start mb-8">
                                         <div>
-                                            <p className="text-[10px] font-mono font-black text-gray-400 uppercase tracking-widest mb-1">{block.level}</p>
                                             <h4 className="text-3xl font-black text-gray-900 uppercase tracking-tighter italic">{block.zone}</h4>
                                         </div>
                                         <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${block.grad} flex items-center justify-center text-white font-bold shadow-xl group-hover:rotate-12 transition-transform`}>0{i+1}</div>

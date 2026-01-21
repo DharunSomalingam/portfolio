@@ -219,10 +219,10 @@ function ExperienceBlock({ exp, index, scrollYProgress }: any) {
                         <h3 className="text-5xl lg:text-7xl font-black text-gray-900 mb-6 uppercase tracking-tighter leading-[0.9]">{exp.title}</h3>
                         <p className="text-gray-500 text-lg leading-relaxed max-w-md mb-8">{exp.description}</p>
                         <div className={`flex flex-wrap gap-2 ${!isEven && 'justify-end'}`}>
-                            {exp.skills.map(s => (
+                            {exp.skills.map((s: string) => (
                                 <span key={s} className="px-3 py-1 bg-black text-[10px] font-bold text-white uppercase tracking-tighter hover:bg-orange-500 transition-colors shadow-lg">
-                                    {s}
-                                </span>
+        {s}
+    </span>
                             ))}
                         </div>
                     </div>
