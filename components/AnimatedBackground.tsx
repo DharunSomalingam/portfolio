@@ -1,198 +1,62 @@
-'use client'
+import {FaChartLine, FaCloudSun, FaShieldAlt, FaSyncAlt, FaTerminal, FaTools} from "react-icons/fa";
 
-import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion'
-import Image from 'next/image'
-import { useEffect, useState, useMemo, useCallback } from 'react'
-
-export default function About() {
-    const [mounted, setMounted] = useState(false)
-    const [element, setElement] = useState<HTMLElement | null>(null)
-    const [currentPhoto, setCurrentPhoto] = useState(0)
-
-    // REPLACE THESE WITH YOUR ACTUAL PHOTO PATHS
-    const myPhotos = ["/photo1.jpg", "/photo2.jpg", "/photo3.jpg"]
-
-    useEffect(() => {
-        setMounted(true)
-        const timer = setInterval(() => {
-            setCurrentPhoto((prev) => (prev + 1) % myPhotos.length)
-        }, 3000)
-        return () => clearInterval(timer)
-    }, [myPhotos.length])
-
-    const onRefChange = useCallback((node: HTMLElement | null) => {
-        if (node) setElement(node)
-    }, [])
-
-    const skills = [
-        "Python (Advanced)", "SQL", "FastAPI", "R", "Java", "ETL Pipelines",
-        "Mistral OCR", "PostgreSQL", "LLM Integration", "Geospatial Analysis",
-        "Data Warehousing", "Flask", "Machine Learning", "Docker", "Git", "AJAX"
-    ]
-
-    const skillNodes = useMemo(() => {
-        return skills.map((skill, i) => ({
-            name: skill,
-            id: i,
-            top: `${(i * 17) % 80 + 10}%`,
-            left: `${(i * 23) % 80 + 10}%`,
-            duration: 10 + (i % 12),
-            delay: i * -0.8
-        }))
-    }, [])
-
-    if (!mounted) return <div className="min-h-screen bg-[#FFFAF3]" />;
-
-    return (
-        <section
-            ref={onRefChange}
-            className="relative w-full min-h-screen overflow-hidden bg-[#FFFAF3] py-24 px-6 selection:bg-orange-200"
-        >
-            {/* --- THE FLOATING ENGINE --- */}
-            <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
-                {skillNodes.map((node) => (
-                    <motion.div
-                        key={node.id}
-                        animate={{
-                            opacity: [0.4, 0.8, 0.4],
-                            x: [0, 50, -50, 0],
-                            y: [0, -30, 30, 0],
-                        }}
-                        transition={{
-                            duration: node.duration,
-                            repeat: Infinity,
-                            ease: "easeInOut",
-                            delay: node.delay
-                        }}
-                        className="absolute flex items-center justify-center"
-                        style={{ top: node.top, left: node.left }}
-                    >
-                        <div className="px-5 py-2 bg-white border-2 border-orange-100 rounded-2xl shadow-xl">
-                            <span className="text-[11px] font-black uppercase tracking-tighter text-orange-600">
-                                {node.name}
-                            </span>
-                        </div>
-                    </motion.div>
-                ))}
-            </div>
-
-            <div className="relative z-10 max-w-7xl mx-auto">
-                {/* --- HEADER --- */}
-                <div className="mb-24">
-                    <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
-                        <h2 className="text-[11vw] leading-[0.8] font-black text-gray-900 tracking-tighter uppercase italic">
-                            Dharun <br />
-                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-rose-600">
-                                Somalingam
-                            </span>
-                        </h2>
-                        {/* ... (keep your existing header subtext) */}
-                    </motion.div>
-                </div>
-
-                {/* --- THE BENTO PHILOSOPHY --- */}
-                <div className="grid grid-cols-1 md:grid-cols-12 gap-6 auto-rows-[160px]">
-
-                    {/* Philosophy: The Core Statement + Glowing Ring */}
-                    <motion.div
-                        whileHover={{ y: -5 }}
-                        className="md:col-span-8 md:row-span-2 bg-gray-900 rounded-[3rem] p-12 text-white flex flex-col justify-center relative overflow-hidden group"
-                    >
-                        <h4 className="text-[10px] font-bold text-orange-400 uppercase tracking-[0.5em] mb-6">Operating Principle</h4>
-                        <p className="text-4xl md:text-5xl font-medium leading-[1.1] tracking-tight">
-                            "If the data exists, <span className="text-orange-400">I mine it.</span> <br/>
-                            If it’s manual, <span className="text-orange-400">I automate it."</span>
-                        </p>
-
-                        {/* THE GLOWING RING */}
-                        <div className="absolute bottom-[-20px] right-[-20px] p-10">
-                            <motion.div
-                                animate={{ rotate: 360 }}
-                                transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
-                                className="w-48 h-48 rounded-full border-[2px] border-dashed border-orange-500/30 flex items-center justify-center"
-                            >
-                                <motion.div
-                                    animate={{ scale: [1, 1.1, 1], opacity: [0.3, 0.6, 0.3] }}
-                                    transition={{ duration: 4, repeat: Infinity }}
-                                    className="w-32 h-32 rounded-full border-[12px] border-orange-500 shadow-[0_0_50px_rgba(249,115,22,0.4)]"
-                                />
-                            </motion.div>
-                        </div>
-                    </motion.div>
-
-                    {/* PHOTO SLIDER (Replaces Direct Lines) */}
-                    <div className="md:col-span-4 md:row-span-2 bg-white rounded-[3rem] overflow-hidden relative border-2 border-orange-500/10 shadow-xl">
-                        <AnimatePresence mode="wait">
-                            <motion.div
-                                key={currentPhoto}
-                                initial={{ x: 300, opacity: 0 }}
-                                animate={{ x: 0, opacity: 1 }}
-                                exit={{ x: -300, opacity: 0 }}
-                                transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-                                className="absolute inset-0"
-                            >
-                                <Image
-                                    src={myPhotos[currentPhoto]}
-                                    alt="Dharun Workspace"
-                                    fill
-                                    className="object-cover"
-                                />
-                                {/* Gradient Overlay for text readability if needed */}
-                                <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
-                            </motion.div>
-                        </AnimatePresence>
-                        <div className="absolute bottom-6 left-6 z-10">
-                            <p className="text-[10px] font-black text-white/80 uppercase tracking-widest">Visual_Log // 0{currentPhoto + 1}</p>
-                        </div>
-                    </div>
-
-                    {/* Skill Pillar: Extraction */}
-                    <div className="md:col-span-4 md:row-span-2 bg-orange-500 rounded-[3rem] p-10 text-white flex flex-col justify-between hover:rotate-1 transition-transform">
-                        <h5 className="text-5xl font-black italic opacity-50">01</h5>
-                        <div>
-                            <p className="text-2xl font-bold mb-2">Extract</p>
-                            <p className="text-orange-100 text-sm font-medium">Developing scalable ELT/ETL workflows using Python, SQL, and PostgreSQL to handle massive geospatial and research datasets.</p>
-                        </div>
-                    </div>
-
-                    {/* Skill Pillar: AI Integration */}
-                    <div className="md:col-span-4 md:row-span-2 bg-white rounded-[3rem] p-10 text-gray-900 border border-gray-100 flex flex-col justify-between shadow-sm hover:-rotate-1 transition-transform">
-                        <h5 className="text-5xl font-black italic text-gray-100">02</h5>
-                        <div>
-                            <p className="text-2xl font-bold mb-2">Integrate</p>
-                            <p className="text-gray-500 text-sm font-medium">Bridging the gap between raw data and LLMs. Specialized in AI-driven OCR (Mistral) and automated post-processing.</p>
-                        </div>
-                    </div>
-
-                    {/* Skill Pillar: Software Logic */}
-                    <div className="md:col-span-4 md:row-span-2 bg-rose-500 rounded-[3rem] p-10 text-white flex flex-col justify-between hover:rotate-1 transition-transform">
-                        <h5 className="text-5xl font-black italic opacity-50">03</h5>
-                        <div>
-                            <p className="text-2xl font-bold mb-2">Automate</p>
-                            <p className="text-rose-100 text-sm font-medium">Building self-healing systems and Flask/FastAPI tools that ensure high reliability and zero manual friction.</p>
-                        </div>
-                    </div>
-
-                </div>
-
-                {/* --- ACADEMIC FOUNDATION --- */}
-                <div className="mt-32 p-12 bg-white rounded-[4rem] border border-gray-100 shadow-2xl flex flex-col md:flex-row items-center gap-12">
-                    <div className="md:w-1/3">
-                        <div className="relative aspect-square rounded-[2rem] overflow-hidden">
-                            <Image src="/uwa.jpg" alt="Dharun" fill className="object-cover" />
-                        </div>
-                    </div>
-                    <div className="md:w-2/3 space-y-4">
-                        <p className="text-orange-500 font-black uppercase tracking-[0.3em] text-xs">Education</p>
-                        <h4 className="text-4xl font-bold text-gray-900">UWA Bachelor of Science</h4>
-                        <p className="text-xl text-gray-500 font-medium italic">Double Major: Data Science & Computer Science</p>
-                        <p className="text-gray-500 leading-relaxed">
-                            My academic journey at the University of Western Australia is built on the rigor of statistical
-                            modelling and computational theory. Expected Completion: December 2025.
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </section>
-    )
-}
+const PROJECTS = [
+    {
+        id: "SYS-01", name: "CHRONIC CARE ECOSYSTEM", logo: <FaShieldAlt className="text-blue-600" />,
+        short: "Agile medical platform for secure record management. Built with HIPAA-compliant architecture and real-time syncing.",
+        images: ["/project1a.png", "/project1b.png", '/project1c.png'], tag: "System Arch",
+        stack: "Flask / Socket.IO / SQLAlchemy", database: "PostgreSQL / SQLite",
+        github:"https://github.com/DharunSomalingam/3403GroupProject.git",
+        details: "Full-stack health tracking app built with Flask and SocketIO to handle real-time appointment updates and user alerts. Integrated Chart.js to turn patient logs into visual trends, helping users see which treatments or practitioners they visit most. Built a secure document manager using SQLAlchemy to organize medical records, referrals, and prescriptions. Used AJAX and jQuery to ensure the dashboard updates instantly without needing to refresh the page.",
+        impact: "Cut down the time spent manually organising medical paperwork and appointments. Made it significantly faster to find specific test results or referrals through categorised storage. Improved data privacy for users by moving sensitive medical documents from local folders to a secure, authenticated database.",
+        keyFeatures: ["Real-Time Reminders", "Medical Document Manager", "Health Trends Analytics", "Secure Document Sharing"]
+    },
+    {
+        id: "DAT-02", name: "ROAD CRASH DW/ETL", logo: <FaChartLine className="text-red-600" />,
+        short: "High-volume Star Schema mining for fatality modeling. Automated ETL pipelines processing millions of rows.",
+        images: ["/project_1b.png", "/project_2b.png"], tag: "Data Eng",
+        stack: "Python / Pandas / NumPy / R", database: "Star Schema / Snowflake DW",
+        github:"https://github.com/DharunSomalingam/AUSTRALIAN-ROAD-CRASH-ANALYSIS-DATAWAREHOUSING-AND-MINING-TECHNIQUES.git",
+        details: "Developed a data warehouse using Kimball’s four-step methodology to process over 2 million crash records from the Australian Road Deaths Database (ARDD). Designed a star schema with optimized fact and dimension tables to allow for complex querying of accident factors. Implemented association rule mining to detect patterns in road fatalities and used statistical modeling to compare Australian road safety performance against international benchmarks like Norway and Iceland.",
+        impact: "Identified over 15 high-risk accident scenarios that help pinpoint where safety reforms are most needed. Provided a structured data framework that demonstrates how specific factors such speed and demographics contribute to the 10% year-on-year increase in road deaths. Created a foundation for evidence-based policy suggestions aimed at reducing fatality rates toward international standards.",
+        keyFeatures: ["2M+ Record ETL Pipeline", "Kimball Star Schema", "Association Rule Mining", "International Safety Benchmarking"]
+    },
+    {
+        id: "AI-03", name: "OCR CENSUS DIGITIZER USING LLMS", logo: <FaTerminal className="text-emerald-600" />,
+        short: "Leveraging Mistral AI and OCR pipelines to digitize historical census data with 99.2% accuracy.",
+        images: ["/project_1c.png", "/project_2c.png", "/ocr.png"], tag: "AI/ML",
+        stack: "Mistral AI / Python / OCR", database: "Structured CSV / JSON",
+        github:"https://github.com/Cooper-Thomas1/ClimateAnalysis.git",
+        details: "Self-healing OCR pipeline with error detection and retry mechanisms. Dynamic page chunking adapting to varied formats across 200+ documents. AI post-processing using Mistral LLM to correct headers and standardize labels. Schema validation for machine-readable outputs.",
+        impact: "Enables UN SDG 2030 research on climate migration. Data supports policy design for vulnerable communities facing displacement. Powers international climate mobility analyses.",
+        keyFeatures: ["99.2% Accuracy", "Self-Healing", "AI Processing", "SDG Aligned"]
+    },
+    {
+        id: "GEO-04", name: "GEOSPATIAL WEATHER", logo: <FaCloudSun className="text-purple-600" />,
+        short: "Complex bounding-box API extraction for climate resilience modeling and geospatial visualisation.",
+        images: ["/geo1.png", "/geo2.png","/geo3.png"], tag: "Geospatial",
+        stack: "Python / Netatmo API / DPIRD", database: "PostgreSQL / PostGIS",
+        details: "Authenticated workflows extracting climate data across 5 Australian cities. Geospatial bounding box queries with sub-kilometer precision. ETL/ELT processes with PostGIS extensions for spatial operations. Fine-grained urban heat analysis.",
+        impact: "Data informs sustainable urban planning policies. Research contributes to climate resilience strategies. Findings support zoning decisions prioritising green space.",
+        keyFeatures: ["5-City Coverage", "Sub-km Precision", "Spatial Indexing", "Heat Analysis"]
+    },
+    {
+        id: "AUTO-05", name: "OBSIDIAN → NOTION", logo: <FaSyncAlt className="text-amber-600" />,
+        short: "Metadata-preserving sync engine. Bridges the gap between local markdown notes and cloud databases.",
+        images: ["/obs1.png", "/obs2.png","/obs3.png"], tag: "Automation",
+        stack: "Python / Notion API / Shell Script", database: "Notion Database",
+        github:"https://github.com/DharunSomalingam/Nortion_Script.git",
+        details: "Bidirectional sync preserving YAML frontmatter and nested structures including files. QuickAdd workflow integration enabling seamless capture. Conflict resolution for concurrent edits.",
+        impact: "Automated workflows saving 5+ hours weekly for knowledge workers. Eliminated manual operations across platforms. Enhanced collaboration through synchronized databases.",
+        keyFeatures: ["Two-Way Sync", "Metadata Preservation", "AI Enhancement", "Ghost CMS"]
+    },
+    {
+        id: "SRV-06", name: "IT SERVICES (CAB-WA)", logo: <FaTools className="text-slate-900"/>,
+        short: "Scalable Flask tools for legal service reliability. Centralised management for multi-tenant IT support.",
+        images: ["/cab1.png", "/cab2.png"], tag: "Backend",
+        stack: "Flask / RESTful API / Python", database: "MySQL / PostgreSQL",
+        details: "Led the database optimization and technical support strategy for a legal services environment, improving query performance 3x across existing PostgreSQL systems. Conducted a comprehensive technical evaluation of specialized legal practice management software, specifically analyzing Clio for data migration feasibility and case management alignment. Developed a centralized Flask-based support dashboard to manage IT requests for 500+ staff across multiple legal centers, ensuring role-based access for sensitive data.",
+        impact: "Reduced IT resolution times by 40% through streamlined technical support workflows. Provided the analytical foundation for a major database transition to Clio, ensuring future scalability for legal case management. Supported the delivery of free legal advice to 100+ vulnerable community members by maintaining 99.9% uptime for critical internal systems.",
+        keyFeatures: ["Database Performance Tuning", "Clio Software Evaluation", "Multi-Tenant Support Systems", "Legal Tech Modernization"]
+    }
+];

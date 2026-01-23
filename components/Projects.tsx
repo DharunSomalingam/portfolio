@@ -4,7 +4,7 @@ import { useEffect, useState, useRef, memo } from "react";
 import { motion, useScroll, useTransform, useSpring, useMotionValue, AnimatePresence } from "framer-motion";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, EffectFade } from "swiper";
-import { FaArrowRight, FaFingerprint, FaDatabase, FaShieldAlt, FaChartLine, FaCloudSun, FaSyncAlt, FaTools, FaGithub, FaCode, FaMicrochip, FaTerminal } from "react-icons/fa";
+import { FaArrowRight, FaFingerprint, FaDatabase, FaShieldAlt, FaChartLine, FaCloudSun, FaSyncAlt, FaTools, FaGithub, FaCode, FaTerminal } from "react-icons/fa";
 
 // Import Swiper styles
 import "swiper/css";
@@ -84,7 +84,6 @@ export default function Projects() {
     useEffect(() => {
         setMounted(true);
         const handleMove = (e: MouseEvent) => {
-            // Optimization: Limit updates to animation frames
             window.requestAnimationFrame(() => {
                 mouseX.set(e.clientX);
                 mouseY.set(e.clientY);
@@ -97,19 +96,19 @@ export default function Projects() {
     if (!mounted) return null;
 
     return (
-        <section id="projects" className="relative w-full py-64 px-8 bg-[#FFFAF3] overflow-hidden">
+        <section id="projects" className="relative w-full py-32 md:py-64 px-4 md:px-8 bg-[#FFFAF3] overflow-hidden">
             <motion.div style={{ y: bgY }} className="absolute inset-0 pointer-events-none z-0">
                 <div className="absolute inset-0 opacity-[0.05] bg-[radial-gradient(#ea580c_1px,transparent_1px)] [background-size:40px_40px]" />
             </motion.div>
 
             <div className="max-w-[1600px] mx-auto relative z-10">
-                <header className="mb-64">
-                    <h3 className="text-[12vw] font-black text-slate-900 tracking-tighter leading-[0.8] uppercase">
+                <header className="mb-24 md:mb-64">
+                    <h3 className="text-[15vw] md:text-[12vw] font-black text-slate-900 tracking-tighter leading-[0.8] uppercase">
                         PROJECT <br /><span className="text-orange-500 italic">VAULT.</span>
                     </h3>
                 </header>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-48">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-16 md:gap-y-48">
                     {PROJECTS.map((project) => (
                         <ProjectCard
                             key={project.id}
@@ -134,12 +133,12 @@ const ProjectCard = memo(({ project, setActiveProject }: any) => {
     const mX = useMotionValue(0);
     const mY = useMotionValue(0);
 
-    // Optimized spring settings for mobile/web consistency
     const rotateX = useSpring(useTransform(mY, [-0.5, 0.5], [8, -8]), { stiffness: 80, damping: 15 });
     const rotateY = useSpring(useTransform(mX, [-0.5, 0.5], [-8, 8]), { stiffness: 80, damping: 15 });
 
     const handleMouseMove = (e: React.MouseEvent) => {
-        if (isFlipped) return;
+        // Disable tilt on small screens/touch devices for better scroll performance
+        if (isFlipped || (typeof window !== 'undefined' && window.innerWidth < 1024)) return;
         const rect = cardRef.current?.getBoundingClientRect();
         if (rect) {
             mX.set((e.clientX - rect.left) / rect.width - 0.5);
@@ -147,8 +146,13 @@ const ProjectCard = memo(({ project, setActiveProject }: any) => {
         }
     };
 
+    // Handler to flip card ONLY if the background is clicked
+    const handleCardClick = () => {
+        setIsFlipped(!isFlipped);
+    };
+
     return (
-        <div className="relative h-[720px] w-full" style={{ perspective: "1500px" }}>
+        <div className="relative h-[650px] md:h-[720px] w-full" style={{ perspective: "1500px" }}>
             <motion.div
                 ref={cardRef}
                 animate={{ rotateY: isFlipped ? 180 : 0 }}
@@ -157,22 +161,22 @@ const ProjectCard = memo(({ project, setActiveProject }: any) => {
                 onMouseMove={handleMouseMove}
                 onMouseEnter={() => setActiveProject(project.name)}
                 onMouseLeave={() => { mX.set(0); mY.set(0); setActiveProject(null); }}
-                onClick={() => setIsFlipped(!isFlipped)}
+                onClick={handleCardClick}
                 className="relative w-full h-full cursor-pointer will-change-transform"
             >
                 {/* FRONT FACE */}
                 <div className="absolute inset-0 w-full h-full" style={{ backfaceVisibility: "hidden", WebkitBackfaceVisibility: "hidden" }}>
-                    <div className="relative bg-white/40 backdrop-blur-xl border border-white/80 rounded-[4rem] p-4 shadow-2xl h-full">
-                        <div className="bg-[#FFFAF3]/80 rounded-[3.5rem] p-10 h-full flex flex-col">
-                            <div className="flex justify-between items-start mb-8">
+                    <div className="relative bg-white/40 backdrop-blur-xl border border-white/80 rounded-[3rem] md:rounded-[4rem] p-3 md:p-4 shadow-2xl h-full">
+                        <div className="bg-[#FFFAF3]/80 rounded-[2.5rem] md:rounded-[3.5rem] p-6 md:p-10 h-full flex flex-col">
+                            <div className="flex justify-between items-start mb-6 md:mb-8">
                                 <div>
                                     <p className="font-mono text-[10px] font-black text-orange-600 tracking-[0.5em] mb-2">{project.id}</p>
-                                    <h4 className="text-3xl font-black text-slate-900 tracking-tighter uppercase leading-tight">{project.name}</h4>
+                                    <h4 className="text-2xl md:text-3xl font-black text-slate-900 tracking-tighter uppercase leading-tight">{project.name}</h4>
                                 </div>
-                                <div className="text-3xl p-5 bg-white shadow-lg rounded-3xl">{project.logo}</div>
+                                <div className="text-2xl md:text-3xl p-4 md:p-5 bg-white shadow-lg rounded-2xl md:rounded-3xl">{project.logo}</div>
                             </div>
 
-                            <div className="relative h-64 w-full rounded-[3rem] overflow-hidden mb-8 shadow-inner border-2 border-white pointer-events-none">
+                            <div className="relative h-48 md:h-64 w-full rounded-[2rem] md:rounded-[3rem] overflow-hidden mb-6 md:mb-8 shadow-inner border-2 border-white pointer-events-none">
                                 <Swiper
                                     modules={[Autoplay, EffectFade]}
                                     effect="fade"
@@ -188,7 +192,7 @@ const ProjectCard = memo(({ project, setActiveProject }: any) => {
 
                             <p className="text-slate-500 text-sm italic font-medium">"{project.short}"</p>
 
-                            <div className="p-6 bg-slate-900 rounded-[2rem] flex items-center justify-between mt-auto">
+                            <div className="p-5 md:p-6 bg-slate-900 rounded-[1.5rem] md:rounded-[2rem] flex items-center justify-between mt-auto">
                                 <div className="flex items-center gap-4 text-white">
                                     <FaFingerprint className="text-xl text-orange-500" />
                                     <span className="font-black text-[9px] uppercase tracking-widest">Open Details</span>
@@ -201,33 +205,47 @@ const ProjectCard = memo(({ project, setActiveProject }: any) => {
 
                 {/* BACK FACE */}
                 <div className="absolute inset-0 w-full h-full" style={{ backfaceVisibility: "hidden", WebkitBackfaceVisibility: "hidden", transform: "rotateY(180deg)" }}>
-                    <div className="relative bg-white/95 rounded-[4rem] p-4 h-full">
-                        <div className="relative bg-[#FFFAF3] rounded-[3.5rem] p-10 h-full flex flex-col border border-orange-100 overflow-y-auto overflow-x-hidden">
-                            <h4 className="text-2xl font-black text-slate-900 uppercase mb-6">{project.name}</h4>
+                    <div className="relative bg-white/95 rounded-[3rem] md:rounded-[4rem] p-4 h-full">
+                        <div className="relative bg-[#FFFAF3] rounded-[2.5rem] md:rounded-[3.5rem] p-6 md:p-10 h-full flex flex-col border border-orange-100 overflow-y-auto overflow-x-hidden">
+                            <h4 className="text-xl md:text-2xl font-black text-slate-900 uppercase mb-6">{project.name}</h4>
 
                             <div className="grid grid-cols-2 gap-4 mb-6">
-                                <div className="p-4 bg-orange-50 rounded-2xl border border-orange-100">
+                                <div className="p-3 md:p-4 bg-orange-50 rounded-2xl border border-orange-100">
                                     <FaCode className="text-orange-500 mb-2" />
                                     <p className="text-[8px] font-black text-orange-400 uppercase">Stack</p>
-                                    <p className="text-[11px] font-bold text-slate-800">{project.stack}</p>
+                                    <p className="text-[10px] md:text-[11px] font-bold text-slate-800">{project.stack}</p>
                                 </div>
-                                <div className="p-4 bg-blue-50 rounded-2xl border border-blue-100">
+                                <div className="p-3 md:p-4 bg-blue-50 rounded-2xl border border-blue-100">
                                     <FaDatabase className="text-blue-500 mb-2" />
                                     <p className="text-[8px] font-black text-blue-400 uppercase">DB</p>
-                                    <p className="text-[11px] font-bold text-slate-800">{project.database}</p>
+                                    <p className="text-[10px] md:text-[11px] font-bold text-slate-800">{project.database}</p>
                                 </div>
                             </div>
 
                             <div className="space-y-4 mb-6">
-                                <p className="text-slate-700 text-sm leading-relaxed"><strong className="text-orange-600 text-[10px] block uppercase mb-1">Overview:</strong> {project.details}</p>
-                                <p className="text-slate-700 text-sm leading-relaxed"><strong className="text-emerald-600 text-[10px] block uppercase mb-1">Impact:</strong> {project.impact}</p>
+                                <p className="text-slate-700 text-xs md:text-sm leading-relaxed"><strong className="text-orange-600 text-[10px] block uppercase mb-1">Overview:</strong> {project.details}</p>
+                                <p className="text-slate-700 text-xs md:text-sm leading-relaxed"><strong className="text-emerald-600 text-[10px] block uppercase mb-1">Impact:</strong> {project.impact}</p>
                             </div>
 
                             <div className="flex gap-2 mb-8">
-                                <a href={project.github} target="_blank" rel="noopener noreferrer" className="flex-1 py-4 bg-slate-900 text-white rounded-2xl flex items-center justify-center gap-2 text-[10px] font-black tracking-widest hover:bg-orange-600 transition-colors">
+                                <a
+                                    href={project.github}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    onClick={(e) => e.stopPropagation()} // STOP BUBBLING
+                                    className="flex-1 py-4 bg-slate-900 text-white rounded-2xl flex items-center justify-center gap-2 text-[10px] font-black tracking-widest hover:bg-orange-600 transition-colors"
+                                >
                                     <FaGithub /> REPO
                                 </a>
-                                <button className="flex-1 py-4 border-2 border-slate-900 rounded-2xl text-[10px] font-black tracking-widest uppercase">CLOSE</button>
+                                <button
+                                    onClick={(e) => {
+                                        e.stopPropagation(); // STOP BUBBLING
+                                        setIsFlipped(false);
+                                    }}
+                                    className="flex-1 py-4 border-2 border-slate-900 rounded-2xl text-[10px] font-black tracking-widest uppercase"
+                                >
+                                    CLOSE
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -241,6 +259,9 @@ const PrecisionTargetCursor = memo(({ mouseX, mouseY }: any) => {
     const springX = useSpring(mouseX, { damping: 30, stiffness: 200 });
     const springY = useSpring(mouseY, { damping: 30, stiffness: 200 });
 
+    // Hide custom cursor on mobile/touch devices
+    if (typeof window !== 'undefined' && window.innerWidth < 1024) return null;
+
     return (
         <motion.div
             className="fixed top-0 left-0 w-32 h-32 pointer-events-none z-[99999] will-change-transform"
@@ -251,7 +272,6 @@ const PrecisionTargetCursor = memo(({ mouseX, mouseY }: any) => {
                 <svg className="absolute inset-0 w-full h-full opacity-30">
                     <circle cx="50%" cy="50%" r="35%" fill="none" stroke="#ea580c" strokeWidth="1" strokeDasharray="4 4" />
                 </svg>
-                {/* Visual frame corners */}
                 <div className="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-orange-500" />
                 <div className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-orange-500" />
                 <div className="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-orange-500" />
