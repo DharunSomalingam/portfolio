@@ -1,13 +1,20 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
-import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
+import { useEffect, useState, useRef, memo } from "react";
+import { motion, AnimatePresence, useScroll, useTransform, useSpring } from "framer-motion";
 import GlobalCursor from "@/components/GlobalCursor";
 import About from "../components/About";
 import Projects from "../components/Projects";
 import Experience from "@/components/Experience";
 import Contact from "../components/Contact";
 import Extracurricular from "@/components/Extracurricullars";
+
+// 1. Memoize sub-components so they don't re-render when the Hero 'index' changes
+const MemoAbout = memo(About);
+const MemoProjects = memo(Projects);
+const MemoExperience = memo(Experience);
+const MemoExtracurricular = memo(Extracurricular);
+const MemoContact = memo(Contact);
 
 const ROLES = [
     { id: "01", title: "DATA ENGINEER", context: "Python // SQL // ETL", accent: "#fb923c" },
@@ -28,10 +35,13 @@ export default function Home() {
         offset: ["start start", "end end"]
     });
 
-    const planeX = useTransform(scrollYProgress, [0, 0.25], [0, 1500]);
-    const planeY = useTransform(scrollYProgress, [0, 0.25], [0, -1200]);
-    const heroOpacity = useTransform(scrollYProgress, [0, 0.2], [1, 0]);
-    const heroScale = useTransform(scrollYProgress, [0, 0.2], [1, 0.9]);
+    // 2. Smoothen the scroll value with a spring to prevent "stuttering"
+    const smoothProgress = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 });
+
+    const planeX = useTransform(smoothProgress, [0, 0.25], [0, 1500]);
+    const planeY = useTransform(smoothProgress, [0, 0.25], [0, -1200]);
+    const heroOpacity = useTransform(smoothProgress, [0, 0.2], [1, 0]);
+    const heroScale = useTransform(smoothProgress, [0, 0.2], [1, 0.9]);
 
     useEffect(() => {
         setMounted(true);
@@ -48,10 +58,8 @@ export default function Home() {
     if (!mounted) return <div className="min-h-screen bg-[#FFFAF3]" />;
 
     return (
-        // Added 'cursor-none' here to hide system mouse globally
         <main ref={containerRef} className="relative bg-[#FFFAF3] min-h-screen w-full cursor-none overflow-x-hidden selection:bg-orange-500">
 
-            {/* FIX 1: Force Cursor to be the absolute top layer */}
             <div className="fixed inset-0 pointer-events-none z-[9999]">
                 <GlobalCursor />
             </div>
@@ -59,40 +67,39 @@ export default function Home() {
             {/* --- HERO SECTION --- */}
             <motion.section
                 style={{ opacity: heroOpacity, scale: heroScale }}
-                className="relative h-screen w-full flex items-center justify-center overflow-hidden sticky top-0 z-10"
+                className="relative h-screen w-full flex items-center justify-center overflow-hidden sticky top-0 z-10 will-change-transform"
             >
                 {/* 1. BACKGROUND */}
                 <div className="absolute inset-0 pointer-events-none">
                     <motion.div
                         animate={{
                             backgroundColor: ROLES[index].accent,
-                            scale: [1, 1.1, 1],
-                            opacity: [0.08, 0.15, 0.08]
+                            scale: [1, 1.05, 1],
+                            opacity: [0.08, 0.12, 0.08]
                         }}
                         transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                        className="absolute inset-0 blur-[120px] rounded-full"
+                        className="absolute inset-0 blur-[100px] rounded-full will-change-[background-color,transform]"
                     />
                     <motion.div
                         animate={{ borderColor: ROLES[index].accent }}
-                        className="absolute inset-0 opacity-10 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:50px_50px]"
+                        className="absolute inset-0 opacity-10 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:50px_50px] transition-colors duration-1000"
                     />
 
                     {/* UFO */}
                     <motion.div
                         animate={{ x: [-200, 1600], y: [100, 400], rotate: [0, 5, -5, 0] }}
                         transition={{ duration: 22, repeat: Infinity, ease: "linear" }}
-                        className="absolute z-0"
+                        className="absolute z-0 will-change-transform"
                     >
                         <svg width="120" height="60" viewBox="0 0 24 12" fill="none">
                             <motion.ellipse animate={{ stroke: ROLES[index].accent }} cx="12" cy="6" rx="10" ry="3" strokeWidth="0.5" />
                             <motion.path animate={{ stroke: ROLES[index].accent }} d="M7 6C7 3 9 2 12 2C15 2 17 6 17 6" strokeWidth="0.5" />
                             <motion.circle animate={{ fill: ROLES[index].accent, opacity: [0, 1, 0] }} transition={{ repeat: Infinity, duration: 0.8 }} cx="12" cy="9" r="1" />
                         </svg>
-                        <span className="font-mono text-[7px] text-slate-400 tracking-[0.4em] uppercase">Tracking_Node_0{index}</span>
                     </motion.div>
 
                     {/* AIRPLANE */}
-                    <motion.div style={{ x: planeX, y: planeY, left: "15%", top: "25%" }} className="absolute z-20">
+                    <motion.div style={{ x: planeX, y: planeY, left: "15%", top: "25%" }} className="absolute z-20 will-change-transform">
                         <svg width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="#1e293b" strokeWidth="0.4">
                             <path d="M22 2L2 9L11 13L15 22L22 2Z" />
                             <motion.path animate={{ stroke: ROLES[index].accent }} d="M11 13L22 2" strokeDasharray="2 2" />
@@ -106,7 +113,7 @@ export default function Home() {
                                 key={i}
                                 animate={{ y: [0, -100], opacity: [0, 1, 0] }}
                                 transition={{ duration: 5, repeat: Infinity, delay: i * 1 }}
-                                className="absolute"
+                                className="absolute will-change-transform"
                                 style={{ left: `${20 * i}%`, bottom: "10%" }}
                             >
                                 {`0x${index}${i}F_STREAM`}
@@ -120,10 +127,10 @@ export default function Home() {
                     <AnimatePresence mode="wait">
                         <motion.div
                             key={index}
-                            initial={{ opacity: 0, y: 40, filter: "blur(10px)" }}
+                            initial={{ opacity: 0, y: 30, filter: "blur(8px)" }}
                             animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-                            exit={{ opacity: 0, y: -40, filter: "blur(10px)" }}
-                            transition={{ duration: 0.9, ease: [0.19, 1, 0.22, 1] }}
+                            exit={{ opacity: 0, y: -30, filter: "blur(8px)" }}
+                            transition={{ duration: 0.7, ease: [0.19, 1, 0.22, 1] }}
                         >
                             <div className="flex items-center gap-4 mb-6">
                                 <motion.div animate={{ backgroundColor: ROLES[index].accent, width: [0, 60, 40] }} className="h-[2px]" />
@@ -148,7 +155,6 @@ export default function Home() {
                                     <p className="font-mono text-[10px] text-slate-400 uppercase tracking-widest mb-1">Stack Initialize</p>
                                     <p className="text-xl font-black text-slate-900 uppercase italic">{ROLES[index].context}</p>
                                 </motion.div>
-
                             </div>
                         </motion.div>
                     </AnimatePresence>
@@ -159,7 +165,11 @@ export default function Home() {
                     <div className="space-y-4">
                         <div className="flex gap-2">
                             {ROLES.map((_, i) => (
-                                <motion.div key={i} animate={{ width: i === index ? 48 : 8, backgroundColor: i === index ? ROLES[index].accent : "#cbd5e1" }} className="h-1.5 rounded-full transition-all duration-700" />
+                                <motion.div
+                                    key={i}
+                                    animate={{ width: i === index ? 48 : 8, backgroundColor: i === index ? ROLES[index].accent : "#cbd5e1" }}
+                                    className="h-1.5 rounded-full transition-all duration-700"
+                                />
                             ))}
                         </div>
                         <div className="font-mono text-[9px] text-slate-400 flex gap-4 uppercase tracking-widest">
@@ -168,7 +178,11 @@ export default function Home() {
                         </div>
                     </div>
                     <div className="flex flex-col items-center">
-                        <motion.div animate={{ height: [30, 90, 30], backgroundColor: [ROLES[index].accent, "#0f172a", ROLES[index].accent] }} transition={{ repeat: Infinity, duration: 3 }} className="w-[2px]" />
+                        <motion.div
+                            animate={{ height: [30, 90, 30], backgroundColor: [ROLES[index].accent, "#0f172a", ROLES[index].accent] }}
+                            transition={{ repeat: Infinity, duration: 3 }}
+                            className="w-[2px]"
+                        />
                         <span className="font-mono text-[8px] text-slate-900 font-black tracking-[0.5em] uppercase mt-4">Scroll Down</span>
                     </div>
                     <div className="text-right flex flex-col items-end">
@@ -182,23 +196,22 @@ export default function Home() {
             </motion.section>
 
             {/* --- SUB-SURFACE CONTENT --- */}
-            {/* FIX 2: Added z-20 to ensure it sits over Hero, but GlobalCursor at z-[9999] sits over this */}
             <motion.div
                 animate={{ backgroundColor: ROLES[index].accent }}
                 transition={{ duration: 1.2, ease: "easeInOut" }}
-                className="relative z-20 shadow-[-20px_0_120px_rgba(0,0,0,0.12)] rounded-t-[5rem] -mt-[8vh] overflow-hidden"
+                className="relative z-20 shadow-[-20px_0_120px_rgba(0,0,0,0.12)] rounded-t-[5rem] -mt-[8vh] overflow-hidden will-change-transform"
             >
                 <div className="bg-[#FFFAF3]/90 backdrop-blur-xl rounded-t-[5rem] cursor-none">
-                    <About />
-                    <Projects />
-                    <Experience />
-                    <Extracurricular />
-                    <Contact />
+                    <MemoAbout />
+                    <MemoProjects />
+                    <MemoExperience />
+                    <MemoExtracurricular />
+                    <MemoContact />
                 </div>
             </motion.div>
 
             <style jsx global>{`
-                .text-stroke { -webkit-text-stroke: 1.5px #0f172a; color: transparent; }
+                .text-stroke { -webkit-text-stroke: 1.5px #0f172a; color: transparent; transition: color 0.3s ease; }
                 .text-stroke:hover { color: #0f172a; -webkit-text-stroke: 1.5px transparent; }
             `}</style>
         </main>
