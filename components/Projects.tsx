@@ -6,65 +6,90 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, EffectFade } from "swiper";
 import { FaArrowRight, FaFingerprint, FaDatabase, FaShieldAlt, FaChartLine, FaCloudSun, FaSyncAlt, FaTools, FaGithub, FaCode, FaTerminal } from "react-icons/fa";
 
-// Import Swiper styles
 import "swiper/css";
 import "swiper/css/effect-fade";
 
 const PROJECTS = [
     {
-        id: "SYS-01", name: "CHRONIC CARE ECOSYSTEM", logo: <FaShieldAlt className="text-blue-600" />,
+        id: "SYS-01",
+        name: "CHRONIC CARE ECOSYSTEM",
+        logo: <FaShieldAlt className="text-blue-600" />,
         short: "Agile medical platform for secure record management. Built with HIPAA-compliant architecture and real-time syncing.",
-        images: ["/project1a.png", "/project1b.png", '/project1c.png'], tag: "System Arch",
-        stack: "Flask / Socket.IO / SQLAlchemy", database: "PostgreSQL / SQLite",
+        images: ["/project1a.png", "/project1b.png", "/project1c.png"],
+        tag: "System Arch",
+        stack: "Flask / Socket.IO / SQLAlchemy",
+        database: "PostgreSQL / SQLite",
         github: "https://github.com/DharunSomalingam/3403GroupProject.git",
         details: "Full-stack health tracking app built with Flask and SocketIO to handle real-time appointment updates and user alerts. Integrated Chart.js to turn patient logs into visual trends.",
         impact: "Cut down the time spent manually organising medical paperwork. Improved data privacy by moving sensitive documents to a secure database.",
         keyFeatures: ["Real-Time Reminders", "Medical Document Manager", "Health Trends Analytics", "Secure Sharing"]
     },
     {
-        id: "DAT-02", name: "ROAD CRASH DW/ETL", logo: <FaChartLine className="text-red-600" />,
+        id: "DAT-02",
+        name: "ROAD CRASH DW/ETL",
+        logo: <FaChartLine className="text-red-600" />,
         short: "High-volume Star Schema mining for fatality modeling. Automated ETL pipelines processing millions of rows.",
-        images: ["/project_1b.png", "/project_2b.png"], tag: "Data Eng",
-        stack: "Python / Pandas / NumPy / R", database: "Star Schema / Snowflake DW",
+        images: ["/project_1b.png", "/project_2b.png"],
+        tag: "Data Eng",
+        stack: "Python / Pandas / NumPy / R",
+        database: "Star Schema / Snowflake DW",
         github: "https://github.com/DharunSomalingam/AUSTRALIAN-ROAD-CRASH-ANALYSIS-DATAWAREHOUSING-AND-MINING-TECHNIQUES.git",
         details: "Developed a data warehouse using Kimball’s methodology to process over 2 million crash records. Designed a star schema for complex querying of accident factors.",
         impact: "Identified over 15 high-risk accident scenarios. Provided a structured data framework for evidence-based policy suggestions.",
         keyFeatures: ["2M+ Record ETL", "Kimball Star Schema", "Association Mining", "Safety Benchmarking"]
     },
     {
-        id: "AI-03", name: "OCR CENSUS DIGITIZER", logo: <FaTerminal className="text-emerald-600" />,
+        id: "AI-03",
+        name: "OCR CENSUS DIGITIZER",
+        logo: <FaTerminal className="text-emerald-600" />,
         short: "Leveraging Mistral AI and OCR pipelines to digitize historical census data with 99.2% accuracy.",
-        images: ["/project_1c.png", "/project_2c.png", "/ocr.png"], tag: "AI/ML",
-        stack: "Mistral AI / Python / OCR", database: "Structured CSV / JSON",
+        images: ["/project_1c.png", "/project_2c.png", "/ocr.png"],
+        tag: "AI/ML",
+        stack: "Mistral AI / Python / OCR",
+        database: "Structured CSV / JSON",
         github: "https://github.com/Cooper-Thomas1/ClimateAnalysis.git",
         details: "Self-healing OCR pipeline with error detection. AI post-processing using Mistral LLM to correct headers and standardize labels.",
         impact: "Enables UN SDG 2030 research on climate migration. Data supports policy design for vulnerable communities.",
         keyFeatures: ["99.2% Accuracy", "Self-Healing", "AI Processing", "SDG Aligned"]
     },
     {
-        id: "GEO-04", name: "GEOSPATIAL WEATHER", logo: <FaCloudSun className="text-purple-600" />,
+        id: "GEO-04",
+        name: "GEOSPATIAL WEATHER",
+        logo: <FaCloudSun className="text-purple-600" />,
         short: "Complex bounding-box API extraction for climate resilience modeling and geospatial visualisation.",
-        images: ["/geo1.png", "/geo2.png", "/geo3.png"], tag: "Geospatial",
-        stack: "Python / Netatmo API / DPIRD", database: "PostgreSQL / PostGIS",
+        images: ["/geo1.png", "/geo2.png", "/geo3.png"],
+        tag: "Geospatial",
+        stack: "Python / Netatmo API / DPIRD",
+        database: "PostgreSQL / PostGIS",
+        github: "https://github.com/DharunSomalingam/Geospatial-Weather.git",
         details: "Authenticated workflows extracting climate data across 5 Australian cities. ETL/ELT processes with PostGIS extensions.",
         impact: "Informs sustainable urban planning. Research contributes to climate resilience strategies.",
         keyFeatures: ["5-City Coverage", "Sub-km Precision", "Spatial Indexing", "Heat Analysis"]
     },
     {
-        id: "AUTO-05", name: "OBSIDIAN → NOTION", logo: <FaSyncAlt className="text-amber-600" />,
+        id: "AUTO-05",
+        name: "OBSIDIAN → NOTION",
+        logo: <FaSyncAlt className="text-amber-600" />,
         short: "Metadata-preserving sync engine. Bridges the gap between local markdown notes and cloud databases.",
-        images: ["/obs1.png", "/obs2.png", "/obs3.png"], tag: "Automation",
-        stack: "Python / Notion API / Shell Script", database: "Notion Database",
+        images: ["/obs1.png", "/obs2.png", "/obs3.png"],
+        tag: "Automation",
+        stack: "Python / Notion API / Shell Script",
+        database: "Notion Database",
         github: "https://github.com/DharunSomalingam/Nortion_Script.git",
         details: "Bidirectional sync preserving YAML frontmatter and nested structures. QuickAdd workflow integration.",
         impact: "Automated workflows saving 5+ hours weekly. Eliminated manual operations across platforms.",
         keyFeatures: ["Two-Way Sync", "Metadata Preservation", "AI Enhancement", "Ghost CMS"]
     },
     {
-        id: "SRV-06", name: "IT SERVICES (CAB-WA)", logo: <FaTools className="text-slate-900" />,
+        id: "SRV-06",
+        name: "IT SERVICES (CAB-WA)",
+        logo: <FaTools className="text-slate-900" />,
         short: "Scalable Flask tools for legal service reliability. Centralised management for multi-tenant IT support.",
-        images: ["/cab1.png", "/cab2.png"], tag: "Backend",
-        stack: "Flask / RESTful API / Python", database: "MySQL / PostgreSQL",
+        images: ["/cab1.png", "/cab2.png"],
+        tag: "Backend",
+        stack: "Flask / RESTful API / Python",
+        database: "MySQL / PostgreSQL",
+        github: "https://github.com/DharunSomalingam/CAB-WA-IT-Services.git",
         details: "Led database optimization for legal services, improving query performance 3x. Developed a centralized Flask support dashboard.",
         impact: "Reduced IT resolution times by 40%. Supported delivery of free legal advice to 100+ community members.",
         keyFeatures: ["Performance Tuning", "Clio Evaluation", "Multi-Tenant Support", "Tech Modernization"]
@@ -108,7 +133,7 @@ export default function Projects() {
                     </h3>
                 </header>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-16 md:gap-y-48">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-20 md:gap-y-48">
                     {PROJECTS.map((project) => (
                         <ProjectCard
                             key={project.id}
@@ -133,11 +158,10 @@ const ProjectCard = memo(({ project, setActiveProject }: any) => {
     const mX = useMotionValue(0);
     const mY = useMotionValue(0);
 
-    const rotateX = useSpring(useTransform(mY, [-0.5, 0.5], [8, -8]), { stiffness: 80, damping: 15 });
-    const rotateY = useSpring(useTransform(mX, [-0.5, 0.5], [-8, 8]), { stiffness: 80, damping: 15 });
+    const rotateX = useSpring(useTransform(mY, [-0.5, 0.5], [10, -10]), { stiffness: 100, damping: 20 });
+    const rotateYSpring = useSpring(useTransform(mX, [-0.5, 0.5], [-10, 10]), { stiffness: 100, damping: 20 });
 
     const handleMouseMove = (e: React.MouseEvent) => {
-        // Disable tilt on small screens/touch devices for better scroll performance
         if (isFlipped || (typeof window !== 'undefined' && window.innerWidth < 1024)) return;
         const rect = cardRef.current?.getBoundingClientRect();
         if (rect) {
@@ -146,26 +170,31 @@ const ProjectCard = memo(({ project, setActiveProject }: any) => {
         }
     };
 
-    // Handler to flip card ONLY if the background is clicked
-    const handleCardClick = () => {
-        setIsFlipped(!isFlipped);
-    };
-
     return (
-        <div className="relative h-[650px] md:h-[720px] w-full" style={{ perspective: "1500px" }}>
+        <div className="relative h-[680px] md:h-[720px] w-full" style={{ perspective: "2000px" }}>
             <motion.div
                 ref={cardRef}
-                animate={{ rotateY: isFlipped ? 180 : 0 }}
-                transition={{ duration: 0.7, ease: [0.23, 1, 0.32, 1] }}
-                style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
+                style={{
+                    rotateX: isFlipped ? 0 : rotateX,
+                    rotateY: isFlipped ? 180 : rotateYSpring,
+                    transformStyle: "preserve-3d"
+                }}
+                transition={{ type: "spring", stiffness: 260, damping: 20 }}
                 onMouseMove={handleMouseMove}
                 onMouseEnter={() => setActiveProject(project.name)}
                 onMouseLeave={() => { mX.set(0); mY.set(0); setActiveProject(null); }}
-                onClick={handleCardClick}
-                className="relative w-full h-full cursor-pointer will-change-transform"
+                onClick={() => setIsFlipped(!isFlipped)}
+                className="relative w-full h-full cursor-pointer"
             >
                 {/* FRONT FACE */}
-                <div className="absolute inset-0 w-full h-full" style={{ backfaceVisibility: "hidden", WebkitBackfaceVisibility: "hidden" }}>
+                <div
+                    className="absolute inset-0 w-full h-full"
+                    style={{
+                        backfaceVisibility: "hidden",
+                        WebkitBackfaceVisibility: "hidden",
+                        zIndex: isFlipped ? 0 : 1
+                    }}
+                >
                     <div className="relative bg-white/40 backdrop-blur-xl border border-white/80 rounded-[3rem] md:rounded-[4rem] p-3 md:p-4 shadow-2xl h-full">
                         <div className="bg-[#FFFAF3]/80 rounded-[2.5rem] md:rounded-[3.5rem] p-6 md:p-10 h-full flex flex-col">
                             <div className="flex justify-between items-start mb-6 md:mb-8">
@@ -176,7 +205,7 @@ const ProjectCard = memo(({ project, setActiveProject }: any) => {
                                 <div className="text-2xl md:text-3xl p-4 md:p-5 bg-white shadow-lg rounded-2xl md:rounded-3xl">{project.logo}</div>
                             </div>
 
-                            <div className="relative h-48 md:h-64 w-full rounded-[2rem] md:rounded-[3rem] overflow-hidden mb-6 md:mb-8 shadow-inner border-2 border-white pointer-events-none">
+                            <div className="relative h-56 md:h-64 w-full rounded-[2rem] md:rounded-[3rem] overflow-hidden mb-6 md:mb-8 shadow-inner border-2 border-white pointer-events-none">
                                 <Swiper
                                     modules={[Autoplay, EffectFade]}
                                     effect="fade"
@@ -204,9 +233,17 @@ const ProjectCard = memo(({ project, setActiveProject }: any) => {
                 </div>
 
                 {/* BACK FACE */}
-                <div className="absolute inset-0 w-full h-full" style={{ backfaceVisibility: "hidden", WebkitBackfaceVisibility: "hidden", transform: "rotateY(180deg)" }}>
-                    <div className="relative bg-white/95 rounded-[3rem] md:rounded-[4rem] p-4 h-full">
-                        <div className="relative bg-[#FFFAF3] rounded-[2.5rem] md:rounded-[3.5rem] p-6 md:p-10 h-full flex flex-col border border-orange-100 overflow-y-auto overflow-x-hidden">
+                <div
+                    className="absolute inset-0 w-full h-full"
+                    style={{
+                        backfaceVisibility: "hidden",
+                        WebkitBackfaceVisibility: "hidden",
+                        transform: "rotateY(180deg)",
+                        zIndex: isFlipped ? 1 : 0
+                    }}
+                >
+                    <div className="relative bg-white/95 rounded-[3rem] md:rounded-[4rem] p-4 h-full border-2 border-orange-500/20 shadow-2xl">
+                        <div className="relative bg-[#FFFAF3] rounded-[2.5rem] md:rounded-[3.5rem] p-6 md:p-10 h-full flex flex-col overflow-y-auto overflow-x-hidden">
                             <h4 className="text-xl md:text-2xl font-black text-slate-900 uppercase mb-6">{project.name}</h4>
 
                             <div className="grid grid-cols-2 gap-4 mb-6">
@@ -259,7 +296,6 @@ const PrecisionTargetCursor = memo(({ mouseX, mouseY }: any) => {
     const springX = useSpring(mouseX, { damping: 30, stiffness: 200 });
     const springY = useSpring(mouseY, { damping: 30, stiffness: 200 });
 
-    // Hide custom cursor on mobile/touch devices
     if (typeof window !== 'undefined' && window.innerWidth < 1024) return null;
 
     return (
