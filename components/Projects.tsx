@@ -7,6 +7,7 @@ import { Autoplay, EffectFade } from "swiper";
 import { FaTerminal, FaArrowRight, FaFingerprint, FaDatabase, FaShieldAlt, FaChartLine, FaCloudSun, FaSyncAlt, FaTools, FaGithub, FaCode, FaMicrochip } from "react-icons/fa";
 import "swiper/css";
 import "swiper/css/effect-fade";
+import { SpeedInsights } from "@vercel/speed-insights/next"
 
 const PROJECTS = [
     {

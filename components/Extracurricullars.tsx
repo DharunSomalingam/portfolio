@@ -4,6 +4,7 @@ import { motion, useScroll, useTransform, useInView, useSpring, useMotionValue, 
 import Image from "next/image";
 import { useRef, useState, useEffect } from "react";
 import { FaFingerprint, FaArrowRight } from "react-icons/fa";
+import { SpeedInsights } from "@vercel/speed-insights/next"
 
 const activities = [
     { title: 'Ezy Math Tutoring', role: 'Academic Tutor', description: 'Mentoring K-12 students to build mathematical confidence and mastery through tailored pedagogical strategies and curriculum design.', icon: '/icons/math.png', category: 'Education', accent: '#FF6B00' },

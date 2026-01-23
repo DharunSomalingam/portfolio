@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { motion, useSpring } from "framer-motion";
+import { SpeedInsights } from "@vercel/speed-insights/next"
 
 export default function GlobalCursor() {
     const [pos, setPos] = useState({ x: 0, y: 0 });

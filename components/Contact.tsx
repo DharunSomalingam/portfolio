@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useRef } from "react";
 import { motion, useMotionValue, useSpring, AnimatePresence } from "framer-motion";
+import { SpeedInsights } from "@vercel/speed-insights/next"
 
 // Custom SVG Icons
 const LinkedinIcon = () => (
@@ -348,7 +349,7 @@ export default function Contact() {
                         transition={{ delay: 0.4 }}
                         className="text-slate-600 text-lg max-w-2xl font-medium"
                     >
-                        Select your preferred communication channel. All systems are operational and ready for transmission.
+                        Select your preferred communication channel.
                     </motion.p>
                 </header>
 
@@ -386,7 +387,7 @@ export default function Contact() {
                                 transition={{ duration: 2, repeat: Infinity }}
                             />
                         </motion.div>
-                        <span className="text-[11px] font-black text-slate-500 uppercase tracking-widest">Signal: <span className="text-green-600">Optimal (99.9%)</span></span>
+
                     </div>
                     <div className="text-[11px] text-slate-400 uppercase tracking-[0.25em] flex items-center gap-2">
                         <motion.span
@@ -395,7 +396,6 @@ export default function Contact() {
                         >
                             ●
                         </motion.span>
-                        Awaiting transmission...
                     </div>
                 </motion.div>
             </div>

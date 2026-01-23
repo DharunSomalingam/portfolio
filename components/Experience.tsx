@@ -4,6 +4,7 @@ import { useEffect, useState, useRef, useCallback } from "react";
 import { motion, useScroll, useSpring, useTransform, useInView } from "framer-motion";
 import Image from "next/image";
 import { FaLaptopCode, FaRobot, FaDatabase, FaGavel } from "react-icons/fa";
+import { SpeedInsights } from "@vercel/speed-insights/next"
 
 const experiences = [
     {

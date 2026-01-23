@@ -3,6 +3,7 @@
 import { motion, AnimatePresence } from 'framer-motion'
 import Image from 'next/image'
 import { useMemo,useEffect, useState, useRef } from 'react'
+import { SpeedInsights } from "@vercel/speed-insights/next"
 
 // --- FULL-PAGE UFO NEURAL ENGINE ---
 function UFONeuralBackground() {
@@ -372,6 +373,7 @@ export default function About() {
                     </div>
                 </div>
             </div>
+            <SpeedInsights />
         </section>
     );
 }

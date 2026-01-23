@@ -6,6 +6,7 @@ import { useState, useEffect, useRef } from 'react';
 import { FiMenu, FiX, FiLayers, FiTerminal, FiActivity } from "react-icons/fi";
 import Extracurricular from "@/components/Extracurricullars";
 import Experience from "@/components/Experience";
+import { SpeedInsights } from "@vercel/speed-insights/next"
 
 export default function Navbar() {
     const [mounted, setMounted] = useState(false);
