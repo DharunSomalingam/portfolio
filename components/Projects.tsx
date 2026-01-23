@@ -180,7 +180,7 @@ const ProjectCard = memo(({ project, setActiveProject }: any) => {
                                     loop={true}
                                     className="h-full w-full"
                                 >
-                                    {project.images.map((img, i) => (
+                                    {project.images.map((img: string, i: number) => (
                                         <SwiperSlide key={i}><img src={img} loading="lazy" className="object-cover w-full h-full" alt="" /></SwiperSlide>
                                     ))}
                                 </Swiper>
