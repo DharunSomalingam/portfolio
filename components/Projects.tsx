@@ -100,74 +100,37 @@ export default function Projects() {
     const [mounted, setMounted] = useState(false);
     const [activeProject, setActiveProject] = useState<string | null>(null);
 
-    const mouseX = useMotionValue(0);
-    const mouseY = useMotionValue(0);
-
-    // Smooth springs for the "Spotlight" effect
-    const spotlightX = useSpring(mouseX, { stiffness: 50, damping: 20 });
-    const spotlightY = useSpring(mouseY, { stiffness: 50, damping: 20 });
+    const mouseX = useMotionValue(-100);
+    const mouseY = useMotionValue(-100);
 
     const { scrollYProgress } = useScroll();
-
-    // IMPORTANT: Move these useTransform calls here, BEFORE the return null
-    const bgY = useTransform(scrollYProgress, [0, 1], ["0%", "20%"]);
-    const spotlightGradient = useTransform(
-        [spotlightX, spotlightY],
-        ([x, y]) => `radial-gradient(circle 400px at ${x}px ${y}px, rgba(234, 88, 12, 0.08), transparent 80%)`
-    );
+    const bgY = useTransform(scrollYProgress, [0, 1], ["-10%", "10%"]);
 
     useEffect(() => {
         setMounted(true);
         const handleMove = (e: MouseEvent) => {
-            mouseX.set(e.clientX);
-            mouseY.set(e.clientY);
+            window.requestAnimationFrame(() => {
+                mouseX.set(e.clientX);
+                mouseY.set(e.clientY);
+            });
         };
-        window.addEventListener("mousemove", handleMove);
+        window.addEventListener("mousemove", handleMove, { passive: true });
         return () => window.removeEventListener("mousemove", handleMove);
     }, [mouseX, mouseY]);
 
-    // THE RULE: Early return MUST happen after all Hook declarations
     if (!mounted) return null;
 
     return (
         <section id="projects" className="relative w-full py-32 md:py-64 px-4 md:px-8 bg-[#FFFAF3] overflow-hidden">
-
-            {/* --- ADVANCED ANIMATED BACKGROUND --- */}
-            <div className="absolute inset-0 z-0">
-                {/* 1. The Moving Grid */}
-                <motion.div
-                    style={{ y: bgY }}
-                    className="absolute inset-0 opacity-[0.15] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,#000_70%,transparent_100%)]"
-                >
-                    <div className="absolute inset-0 bg-[linear-gradient(to_right,#ea580c_1px,transparent_1px),linear-gradient(to_bottom,#ea580c_1px,transparent_1px)] bg-[size:60px_60px] [animation:grid-move_20s_linear_infinite]" />
-                </motion.div>
-
-                {/* 2. Interactive Spotlight Gradient */}
-                <motion.div
-                    className="absolute inset-0 pointer-events-none"
-                    style={{
-                        background: useTransform(
-                            [spotlightX, spotlightY],
-                            ([x, y]) => `radial-gradient(circle 400px at ${x}px ${y}px, rgba(234, 88, 12, 0.08), transparent 80%)`
-                        )
-                    }}
-                />
-
-                {/* 3. Floating Particles (Subtle) */}
-                <div className="absolute inset-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]" />
-            </div>
+            <motion.div style={{ y: bgY }} className="absolute inset-0 pointer-events-none z-0">
+                <div className="absolute inset-0 opacity-[0.05] bg-[radial-gradient(#ea580c_1px,transparent_1px)] [background-size:40px_40px]" />
+            </motion.div>
 
             <div className="max-w-[1600px] mx-auto relative z-10">
                 <header className="mb-24 md:mb-64">
-                    <motion.div
-                        initial={{ opacity: 0, y: 50 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                    >
-                        <h3 className="text-[15vw] md:text-[12vw] font-black text-slate-900 tracking-tighter leading-[0.8] uppercase">
-                            PROJECT <br /><span className="text-orange-500 italic">VAULT.</span>
-                        </h3>
-                    </motion.div>
+                    <h3 className="text-[15vw] md:text-[12vw] font-black text-slate-900 tracking-tighter leading-[0.8] uppercase">
+                        PROJECT <br /><span className="text-orange-500 italic">VAULT.</span>
+                    </h3>
                 </header>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-20 md:gap-y-48">
@@ -181,22 +144,12 @@ export default function Projects() {
                 </div>
             </div>
 
-            {/* Precision Cursor Implementation */}
             <AnimatePresence>
-                <PrecisionTargetCursor mouseX={mouseX} mouseY={mouseY} />
+                {activeProject && <PrecisionTargetCursor mouseX={mouseX} mouseY={mouseY} />}
             </AnimatePresence>
-
-            {/* Custom Grid Animation CSS */}
-            <style jsx global>{`
-                @keyframes grid-move {
-                    0% { transform: translateY(0); }
-                    100% { transform: translateY(60px); }
-                }
-            `}</style>
         </section>
     );
 }
-
 
 const ProjectCard = memo(({ project, setActiveProject }: any) => {
     const [isFlipped, setIsFlipped] = useState(false);
