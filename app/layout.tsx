@@ -17,7 +17,7 @@ const geistMono = Geist_Mono({
 
 // Page metadata
 export const metadata: Metadata = {
-    title: "Dharun Somalingam | Portfolio",
+    title: "Dharun Somalingam",
     description: "Portfolio of Dharun Somalingam – Data, AI, Systems & Web",
 };
 
